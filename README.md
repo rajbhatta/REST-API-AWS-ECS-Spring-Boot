@@ -184,3 +184,45 @@ public class ResourceNotFoundException extends Exception{
 
 ## 6. Test using Postman ##
 <img src="img/1.png"/>
+
+# 7. Create a Dockerfile #
+```dockerfile
+FROM adoptopenjdk/openjdk11:alpine-jre
+ARG JAR_FILE=target/*.jar
+
+# cp target/spring-boot-web.jar /opt/app/app.jar
+COPY ${JAR_FILE} app.jar
+
+# expose port of docker
+EXPOSE 8080
+
+# java -jar /opt/app/app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
+```
+
+## 7.1 Building application ##
+```java
+mvn clean package
+```
+- We first build the application with Maven or Gradle
+
+## 7.2 Building container image ##
+```java
+docker build  -t springbootdocker:v1 .
+```
+- Put executable JAR in a Docker image by running the docker build command from the root project directory containing the Docker file.
+
+## 7.3 List the docker image ##
+```java
+docker images 
+```
+
+## 7.4 Output in CLI ##
+```java
+REPOSITORY                                     TAG            IMAGE ID       CREATED          SIZE 
+springbootdocker                               v1             28d588890767   22 seconds ago   166MB
+public.ecr.aws/sam/build-python3.8             latest         c10a6cb9c1a5   6 weeks ago      2.19GB
+amazon/aws-sam-cli-emulation-image-python3.8   rapid-1.24.1   9e5feff23a17   7 weeks ago      519MB
+amazon/aws-sam-cli-emulation-image-python3.8   latest         8f6542b496db   7 weeks ago      503MB
+public.ecr.aws/sam/build-python3.8             <none>         88376039f11a   2 months ago     2.18GB
+```
